@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせフォーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>お問い合わせ</h2>
+        <form id="contactForm" action="/api/submit" method="POST">
+            <div class="form-group">
+                <label>お名前 (活動ネーム/個人名)</label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label>連絡方法</label>
+                <div class="contact-select">
+                    <select name="contact_type" id="contactType" required>
+                        <option value="email">メールアドレス</option>
+                        <option value="phone">電話番号</option>
+                    </select>
+                    <input type="text" name="contact_info" id="contactInfo" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>お題 (件名)</label>
+                <input type="text" name="subject" required>
+            </div>
+
+            <div class="form-group">
+                <label>内容</label>
+                <textarea name="content" rows="6" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>その他</label>
+                <textarea name="extra" rows="3"></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn">送信する</button>
+        </form>
+        <p id="statusMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('statusMessage');
+            
+            btn.disabled = true;
+            btn.textContent = '送信中...';
+            msg.textContent = '';
+
+            try {
+                const formData = new FormData(e.target);
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    msg.textContent = '✅ 送信が完了しました！';
+                    msg.style.color = 'green';
+                    e.target.reset();
+                } else {
+                    msg.textContent = '❌ 送信に失敗しました。';
+                    msg.style.color = 'red';
+                }
+            } catch (error) {
+                msg.textContent = '❌ エラーが発生しました。';
+                msg.style.color = 'red';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '送信する';
+            }
+        });
+    </script>
+</body>
+</html>
