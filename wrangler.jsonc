@@ -1,7 +1,26 @@
 {
-  "name": "reception",
-  "compatibility_date": "2026-02-17",
+  "name": "your-worker-name",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-03-01",
+
+  "observability": {
+    "enabled": true, 
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  },
+
   "assets": {
-    "directory": "./" 
+    "directory": "./public",
+    "binding": "ASSETS"
   }
 }
